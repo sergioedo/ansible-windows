@@ -2,7 +2,7 @@
 # ansible-windows
 Use ansible for manage windows servers from a windows client.
 
-### Prerequisities
+## Prerequisities
 
 Ansible requires linux in the client machine (manager node), so you will need a virtual environment for the client:
 
@@ -13,9 +13,9 @@ In windows servers, you must enable remote connections with PowerShell.
 
 Follow next steps for configuration.
 
-### Running
+## Running
 
-## On remote managed server
+### On remote managed server
 * Requires PowerShell 3.0 installed (from powershell terminal, run: $PSVersionTable.PSVersion)
 Note: requires Windows Feature "Windows PowerShell Integrated Scripting Environment (ISE)"
 * Launch powershell terminal (run as administrator)
@@ -28,7 +28,7 @@ Note: requires Windows Feature "Windows PowerShell Integrated Scripting Environm
 
 Now server is ready to be managed by ansible (with win remote connection).
 
-## On manager node (with vagrant)
+### On manager node (with vagrant)
 * Install VirtualBox + Vagrant
 * Edit 'Vagrantfile', to point to the local path of this project on your disk. Then, inside vagrant environment, you can acces to this project resources in /src.
 
