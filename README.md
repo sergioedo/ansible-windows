@@ -16,14 +16,21 @@ Follow next steps for configuration.
 ## Running
 
 ### On remote managed server
-* Requires PowerShell 3.0 installed (from powershell terminal, run: $PSVersionTable.PSVersion). Note: requires Windows Feature "Windows PowerShell Integrated Scripting Environment (ISE)"
+* Requires PowerShell 3.0 installed (from powershell terminal, run: $PSVersionTable.PSVersion). Note: requires Windows Feature "Windows PowerShell Integrated Scripting Environment (ISE)". 
 * Launch powershell terminal (run as administrator)
+* You can try to upgrade from powershell 2.0 with the script ['powershell/upgrade_to_ps3.ps1'](https://github.com/ansible/ansible/blob/devel/examples/scripts/upgrade_to_ps3.ps1).
 * Allow [powershell execution](http://www.howtogeek.com/106273/how-to-allow-the-execution-of-powershell-scripts-on-windows-7/)
-	Set-ExecutionPolicy Unrestricted
-* Execute script 'ConfigureRemotingForAnsible.ps1' (SkipNetworkProfileCheck param needed for private/domain network and public network are defined on the server):
-	./ConfigureRemotingForAnsible.ps1 -SkipNetworkProfileCheck
+```
+Set-ExecutionPolicy Unrestricted
+```
+* Execute script ['powershell/ConfigureRemotingForAnsible.ps1'](https://github.com/ansible/ansible/blob/devel/examples/scripts/ConfigureRemotingForAnsible.ps1) (SkipNetworkProfileCheck param needed for private/domain network and public network are defined on the server).
+```
+./ConfigureRemotingForAnsible.ps1 -SkipNetworkProfileCheck
+```
 * Revert allow powershell execution 
-	Set-ExecutionPolicy Restricted
+```
+Set-ExecutionPolicy Restricted
+```
 
 Now server is ready to be managed by ansible (with win remote connection).
 
