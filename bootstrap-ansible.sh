@@ -17,3 +17,6 @@ pip install xmltodict
 
 #install winrm for windows remote connection
 pip install pywinrm
+
+#Custom config, ansible directories in /src
+sudo cp /src/ansible.cfg /etc/ansible
