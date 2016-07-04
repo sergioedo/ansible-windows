@@ -16,8 +16,7 @@ Follow next steps for configuration.
 ## Running
 
 ### On remote managed server
-* Requires PowerShell 3.0 installed (from powershell terminal, run: $PSVersionTable.PSVersion)
-Note: requires Windows Feature "Windows PowerShell Integrated Scripting Environment (ISE)"
+* Requires PowerShell 3.0 installed (from powershell terminal, run: $PSVersionTable.PSVersion). Note: requires Windows Feature "Windows PowerShell Integrated Scripting Environment (ISE)"
 * Launch powershell terminal (run as administrator)
 * Allow [powershell execution](http://www.howtogeek.com/106273/how-to-allow-the-execution-of-powershell-scripts-on-windows-7/)
 	Set-ExecutionPolicy Unrestricted
@@ -39,25 +38,25 @@ config.vm.synced_folder "c:/src/ansible-windows", "/src"
 ```
 
 * Edit <this_project>/hosts, at the end of the file, add your remote host to manage in a list (in this example 'windows'):
-	[windows]
-	server-name1
-	server-name2
-	server-name3
-
-* Create directory /etc/ansible/group_vars
+```
+[windows]
+server-name1
+server-name2
+server-name3
+```
 * Edit group_vars/windows.yml, replacing {domain_name}, {domain_user} and {password} with valid credentials to connect windows servers.
 ```
-	# it is suggested that these be encrypted with ansible-vault:
-	# ansible-vault edit group_vars/windows.yml
+# it is suggested that these be encrypted with ansible-vault:
+# ansible-vault edit group_vars/windows.yml
 
-	ansible_user: {domain_name}\{domain_user}
-	ansible_password: {user_password}
-	ansible_port: 5986
-	ansible_connection: winrm
-	# The following is necessary for Python 2.7.9+ when using default WinRM self-signed certificates:
-	ansible_winrm_server_cert_validation: ignore
-	# Define transport, like here: https://github.com/diyan/pywinrm#run-process-with-low-level-api-with-domain-user-disabling-https-cert-validation
-	ansible_winrm_transport: ntlm
+ansible_user: {domain_name}\{domain_user}
+ansible_password: {user_password}
+ansible_port: 5986
+ansible_connection: winrm
+# The following is necessary for Python 2.7.9+ when using default WinRM self-signed certificates:
+ansible_winrm_server_cert_validation: ignore
+# Define transport, like here: https://github.com/diyan/pywinrm#run-process-with-low-level-api-with-domain-user-disabling-https-cert-validation
+ansible_winrm_transport: ntlm
 ```
 
 * Run virtual environment:
