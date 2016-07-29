@@ -1,0 +1,7 @@
+---
+- name: Install NodeJS 4 (chocolatey)
+  win_chocolatey: 
+    name: nodejs
+    version: 4.4.0
+    state: present
+    upgrade: true

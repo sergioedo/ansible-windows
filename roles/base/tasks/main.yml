@@ -1,0 +1,25 @@
+---
+# Even though this is automated when you do a package install it's specified here so we 
+# can run the next raw command
+- name: Chocolatey installation 
+  win_chocolatey: name=chocolatey state=present upgrade=no
+- name: Fix problem with Chocolatey .99 (https://github.com/ansible/ansible-modules-extras/issues/378)
+  raw: Chocolatey feature enable -n allowGlobalConfirmation
+
+- name: Install nssm
+  win_chocolatey: 
+    name: nssm
+- name: Install notepad++
+  win_chocolatey: 
+    name: notepadplusplus.install
+    upgrade: true
+    #version: 6.6
+- name: Install 7zip
+  win_chocolatey: 
+    name: 7zip
+- name: Install CClean
+  win_chocolatey: 
+    name: ccleaner
+- name: Install curl
+  win_chocolatey: 
+    name: curl

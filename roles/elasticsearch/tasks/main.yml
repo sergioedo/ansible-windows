@@ -1,0 +1,58 @@
+---
+##Uninstall
+- name: Stop service
+  win_service:
+    name: elasticsearch-service-x64
+    state: stopped
+  ignore_errors: true
+- name: Uninstall elasticsearch service
+  raw: '{{ deploy_data_dir }}\elasticsearch\bin\service remove'
+  ignore_errors: true
+- name: Destroy folder elasticsearch
+  win_file: path='{{ deploy_data_dir_ }}/elasticsearch' state=absent
+  ignore_errors: true
+
+##Install
+- name: Create deploy directory
+  win_file: path='{{ deploy_data_dir_ }}' state=directory
+- name: Download elasticsearch binaries
+  win_get_url:
+    url: 'https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/zip/elasticsearch/2.3.4/elasticsearch-2.3.4.zip'
+    dest: '{{ deploy_data_dir }}\elasticsearch-2.3.4.zip'
+- name: Unzip on deploy directory
+  win_unzip:
+    src: '{{ deploy_data_dir }}\elasticsearch-2.3.4.zip'
+    dest: '{{ deploy_data_dir }}'
+    rm: true
+- name: Rename folder elasticsearch
+  raw: Rename-Item {{ deploy_data_dir_ }}/elasticsearch-2.3.4 elasticsearch
+- name: Copy elasticsearch config (with template)
+  template: src='files/elasticsearch.yml' dest='{{ deploy_data_dir_ }}/elasticsearch/config/elasticsearch.yml'
+
+- name: Fix elasticsearch service script
+  template: src='files/service.bat' dest='{{ deploy_data_dir_ }}/elasticsearch/bin'
+- name: Install elasticsearch service
+  raw: '{{ deploy_data_dir }}\elasticsearch\bin\service.bat install'
+- name: State and mode service (manual-stopped)
+  win_service:
+    name: elasticsearch-service-x64
+    start_mode: manual
+    state: stopped
+
+- name: Elastic Heap Size environment variable
+  win_environment:
+    state: present
+    name: ES_HEAP_SIZE
+    value: "32g"
+    level: machine
+
+#- name: Firewall rule to allow access on TCP port 9200
+#  action: win_firewall_rule
+#  args:
+#      name: http_elastic
+#      enable: yes
+#      state: present
+#      localport: 9200
+#      action: allow
+#      direction: In
+#      protocol: TCP

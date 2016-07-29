@@ -1,0 +1,4 @@
+# Base Path where deploy software
+deploy_disk: 'C:'
+deploy_data_dir: '{{ deploy_disk }}\www'
+deploy_data_dir_: '{{ deploy_disk }}/www'

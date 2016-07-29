@@ -1,0 +1,30 @@
+---
+- name: Uninstall topbeat service
+  raw: '{{ deploy_data_dir }}\topbeat\uninstall-service-topbeat.ps1'
+  ignore_errors: true
+- name: Destroy folder topbeat
+  win_file: path='{{ deploy_data_dir_ }}/topbeat' state=absent
+  ignore_errors: true
+- name: Create deploy directory
+  win_file: path='{{ deploy_data_dir_ }}' state=directory
+- name: Download Topbeat binaries
+  win_get_url:
+    url: 'https://download.elastic.co/beats/topbeat/topbeat-1.2.3-windows.zip'
+    dest: '{{ deploy_data_dir }}\topbeat-1.2.3-windows.zip'
+- name: Unzip on deploy directory
+  win_unzip:
+    src: '{{ deploy_data_dir }}\topbeat-1.2.3-windows.zip'
+    dest: '{{ deploy_data_dir }}'
+    rm: true
+#    creates: "D:\www\topbeat"
+- name: Rename folder topbeat
+  raw: Rename-Item {{ deploy_data_dir_ }}/topbeat-1.2.3-windows topbeat
+- name: Copy topbeat config (with template)
+  template: src='files/topbeat.yml' dest='{{ deploy_data_dir_ }}/topbeat/topbeat.yml'
+- name: Install topbeat service
+  raw: '{{ deploy_data_dir }}\topbeat\install-service-topbeat.ps1'
+- name: State and mode service (manual-stopped)
+  win_service:
+    name: topbeat
+    start_mode: manual
+    state: stopped

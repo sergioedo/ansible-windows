@@ -1,0 +1,37 @@
+---
+##Uninstall
+- name: Uninstall logstash service
+  win_nssm:
+    name: logstash-2.3.3
+    state: absent
+  ignore_errors: true
+- name: Destroy logstash folder
+  win_file: path='{{ deploy_data_dir_ }}/logstash' state=absent
+  ignore_errors: true
+  
+##Install
+- name: Create deploy directory
+  win_file: path='{{ deploy_data_dir_ }}' state=directory
+- name: Download Logstash binaries
+  win_get_url:
+    url: 'https://download.elastic.co/logstash/logstash/logstash-2.3.3.zip'
+    dest: '{{ deploy_data_dir }}\logstash-2.3.3.zip'
+- name: Unzip on deploy directory
+  win_unzip:
+    src: '{{ deploy_data_dir }}\logstash-2.3.3.zip'
+    dest: '{{ deploy_data_dir }}'
+    rm: true
+- name: Rename logstash folder
+  raw: Rename-Item {{ deploy_data_dir_ }}/logstash-2.3.3 logstash
+
+- name: Copy logstash config file
+  template: src='files/logstash.conf' dest='{{ deploy_data_dir_ }}/logstash/bin/logstash.conf'
+- name: Copy logstash .bat service
+  template: src='files/logstash_service.bat' dest='{{ deploy_data_dir_ }}/logstash/bin/logstash_service.bat'
+
+- name: Install logstash service (nssm)
+  win_nssm:
+    name: logstash-2.3.3
+    application: '{{ deploy_data_dir_ }}/logstash/bin/logstash_service.bat'
+    start_mode: manual
+    state: stopped
